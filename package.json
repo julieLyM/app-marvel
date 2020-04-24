@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "node server/index.js",
+    "heroku-prebuild": "cd server && yarn",
+    "heroku-postbuild": "cd client && yarn && yarn run build "
+  },
+  "dependencies": {}
+}
