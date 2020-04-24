@@ -1,0 +1,72 @@
+version: 2.1 
+jobs: 
+  Client: 
+    docker:
+      - image: circleci/node:latest 
+    steps: 
+      - checkout 
+      - run: curl -o- -L https://yarnpkg.com/install.sh | bash
+      - restore_cache:
+         name: Restore Yarn Package Cache
+         keys:
+          - client-yarn-packages-{{ checksum "client/yarn.lock" }}
+      - run:
+         name: Install Dependencies
+         command: cd client && yarn install --frozen-lockfile
+      - save_cache:
+         name: Save Yarn Package Cache
+         key: client-yarn-packages-{{ checksum "client/yarn.lock" }}
+         paths:
+             - ~/.cache/yarn
+      - run: cd client && yarn
+
+  Server: 
+    docker: 
+      - image: circleci/node:latest 
+    steps: 
+      - checkout 
+      - run: curl -o- -L https://yarnpkg.com/install.sh | bash
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+           - server-yarn-packages-{{ checksum "server/yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: cd server && yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: server-yarn-packages-{{ checksum "server/yarn.lock" }}
+          paths:
+              - ~/.cache/yarn
+      - run: cd server && yarn
+
+  Validation:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - run:
+          name: Validation
+          command: echo "marvel validation"
+  Deploy: 
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout 
+      - run: 
+         name: Deploy master to heroku
+         command: git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
+
+workflows:
+  version: 2
+  build_Marvel:
+    jobs:
+      - Client
+      - Server
+      - Validation:
+          type: approval
+          requires: 
+             - Client
+             - Server
+      - Deploy:
+          requires:
+              - Validation
