@@ -7,7 +7,7 @@ import { MainHomeContainer, HomeBloc, ImageBloc } from './style/homeStyle';
 
 export const Home = () => {
   const [characters, setCharacters] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -47,7 +47,7 @@ export const Home = () => {
                   fontSize: '1em',
                   fontWeight: '500',
                 }}
-                to={`character/${element.id}`}
+                to={`characters/${element.id}`}
               >
                 <img
                   src={`${element.thumbnail.path}.${element.thumbnail.extension} `}
@@ -61,7 +61,7 @@ export const Home = () => {
         </HomeBloc>
       )}
       <button onClick={changePage.bind(null, -1)}>before page</button>
-      <button onClick={changePage.bind(null, 1)}>next pagee</button>
+      <button onClick={changePage.bind(null, 1)}>next page</button>
     </MainHomeContainer>
   );
 };

@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <SearchBar />
         <Route exact path="/" component={Home} />
-        <Route path="/character/:id" component={Character} />
+        <Route path="/characters/:id" component={Character} />
         <Route path="/creator/:id" component={Creator} />
         <Route path="/comic/:id" component={Comic} />
       </BrowserRouter>

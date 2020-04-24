@@ -2,7 +2,7 @@ import axios from 'axios';
 import md5 from 'md5';
 import { auth } from '../utils/auth';
 
-export const createMarvelHash = ts => {
+export const createMarvelHash = (ts) => {
   return md5(`${ts}${auth.privateKey}${auth.publicKey}`);
 };
 
@@ -15,22 +15,19 @@ export const generatorMarvelAuth = () => {
   };
 };
 
-export const getCharacters = async page => {
-  const {
-    data: {
-      data: { results: data },
-    },
-  } = await axios.get(`http://gateway.marvel.com/v1/public/characters`, {
+export const getCharacters = async (page, nameStartsWith) => {
+  const { data } = await axios.get(`/api/v1/characters`, {
     params: {
       ...generatorMarvelAuth(),
       limit: 20,
       offset: page * 100,
+      nameStartsWith,
     },
   });
   return data;
 };
 
-export const getOneCharacter = async nameStartsWith => {
+export const getOneCharacter = async (nameStartsWith) => {
   const {
     data: {
       data: { results: character },
@@ -44,35 +41,26 @@ export const getOneCharacter = async nameStartsWith => {
   return character;
 };
 
-export const getCharacterById = async id => {
-  const {
-    data: {
-      data: { results: character },
-    },
-  } = await axios.get(`http://gateway.marvel.com/v1/public/characters/${id}`, {
+export const getCharacterById = async (id) => {
+  const { data } = await axios.get(`/api/v1/characters/${id}`, {
     params: {
       ...generatorMarvelAuth(),
     },
   });
-  console.log(character);
-  return character;
+  console.log(data)
+  return data;
 };
 
-export const getCharacterByIdComic = async id => {
-  const {
-    data: {
-      data: { results: character },
-    },
-  } = await axios.get(
-    `http://gateway.marvel.com/v1/public/characters/${id}/comics`,
+export const getCharacterByIdComic = async (id) => {
+  const { characterComic } = await axios.get(
+    `/api/v1/characters/${id}/comics`,
     {
       params: {
         ...generatorMarvelAuth(),
       },
     }
   );
-  console.log(character);
-  return character;
+  return characterComic;
 };
 
 // export const getAllComics = async page => {
@@ -90,7 +78,7 @@ export const getCharacterByIdComic = async id => {
 //   return data;
 // };
 
-export const getComic = async id => {
+export const getComic = async (id) => {
   const {
     data: {
       data: { results: comic },
@@ -104,7 +92,7 @@ export const getComic = async id => {
   return comic;
 };
 
-export const getCreatorsById = async id => {
+export const getCreatorsById = async (id) => {
   const {
     data: {
       data: { results: creator },

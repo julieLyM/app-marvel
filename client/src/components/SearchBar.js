@@ -28,7 +28,7 @@ export const SearchBar = () => {
     seek();
   }, [search]);
 
-  const searchCharacter = e => {
+  const searchCharacter = (e) => {
     setSearch(e.target.value);
   };
 
@@ -52,7 +52,7 @@ export const SearchBar = () => {
           <BlocSearch>
             {response.map((elem, i) => (
               <div key={i}>
-                <Link onClick={clearSearchBar} to={`/character/${elem.id}`}>
+                <Link onClick={clearSearchBar} to={`/characters/${elem.id}`}>
                   {elem.name}
                 </Link>
               </div>

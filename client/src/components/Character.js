@@ -19,12 +19,8 @@ export const Character = () => {
   useEffect(() => {
     setLoading(true);
     const fetchDatas = async () => {
-      const [dataCharacter, dataComic] = await Promise.all([
-        getCharacterById(),
-        getComic(),
-      ]).catch(e => console.log('test'));
+      const dataCharacter = await getCharacterById(id);
       setPerson(dataCharacter);
-      setPerson(dataComic);
       setLoading(false);
     };
     fetchDatas();
@@ -56,11 +52,13 @@ export const Character = () => {
                     </div>
                   ))}
                 </BlocLink>
-                {/* <BlocLink>
+                <BlocLink>
                   <h3>stories</h3>
                   {elem.stories.items.map((item, i) => (
                     <div key={i}>
-                      <Link to={item.resourceURI}>{item.name}</Link>
+                      <Link to={`/storie/${item.resourceURI}`}>
+                        {item.name}
+                      </Link>
                     </div>
                   ))}
                 </BlocLink>
@@ -68,10 +66,10 @@ export const Character = () => {
                   <h3>url</h3>
                   {elem.urls.map((item, i) => (
                     <div key={i}>
-                      <Link to={item.url}>{item.type}</Link>
+                      <a href={item.url}>{item.type}</a>
                     </div>
                   ))}
-                </BlocLink> */}
+                </BlocLink>
               </ContainerLink>
             </div>
           ))}
